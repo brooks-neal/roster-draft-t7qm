@@ -20,6 +20,57 @@
     n.classList.toggle('bad', !!bad);
   }
 
+  // Native confirm() is unavailable in some browser contexts (it silently returns
+  // false), so removal is confirmed with a second click on the button itself.
+  function armConfirm(btn, armedLabel, onGo) {
+    var original = btn.textContent;
+    var armed = false;
+    var timer = null;
+    function disarm() {
+      armed = false;
+      btn.textContent = original;
+      btn.classList.remove('armed');
+      if (timer) clearTimeout(timer);
+    }
+    btn.addEventListener('click', function () {
+      if (!armed) {
+        armed = true;
+        btn.textContent = armedLabel;
+        btn.classList.add('armed');
+        timer = setTimeout(disarm, 4000);
+        return;
+      }
+      disarm();
+      onGo();
+    });
+    btn.addEventListener('blur', disarm);
+  }
+
+  var undoSnapshot = null;
+
+  function snapshot() {
+    undoSnapshot = JSON.parse(JSON.stringify(model));
+  }
+
+  function offerUndo(message) {
+    var n = document.getElementById('save-note');
+    n.classList.remove('bad');
+    n.textContent = message + ' ';
+    var undo = el('button', 'ed-undo', 'Undo');
+    undo.type = 'button';
+    undo.addEventListener('click', function () {
+      if (!undoSnapshot) return;
+      model = undoSnapshot;
+      undoSnapshot = null;
+      document.getElementById('meta-title').value = model.title;
+      document.getElementById('meta-subtitle').value = model.subtitle;
+      markDirty();
+      render();
+      note('Restored. Save to keep it.');
+    });
+    n.appendChild(undo);
+  }
+
   function markDirty() {
     dirty = true;
     document.getElementById('dirty').hidden = false;
@@ -181,8 +232,10 @@
 
     var del = el('button', 'icon-btn danger', 'Remove');
     del.type = 'button';
-    del.addEventListener('click', function () {
-      if (!window.confirm('Remove ' + (member.name || 'this person') + '?')) return;
+    del.title = 'Remove this person (asks for a second click)';
+    armConfirm(del, 'Click to confirm', function () {
+      var who = member.name || 'that person';
+      snapshot();
       // Anyone who reported to them moves up a level rather than vanishing.
       family.members.forEach(function (other) {
         if (String(other.parent) === String(member.id)) {
@@ -193,6 +246,7 @@
       family.members.splice(index, 1);
       markDirty();
       render();
+      offerUndo('Removed ' + who + '.');
     });
     tools.appendChild(del);
 
@@ -249,11 +303,14 @@
 
     var delDept = el('button', 'icon-btn danger', 'Delete');
     delDept.type = 'button';
-    delDept.addEventListener('click', function () {
-      if (!window.confirm('Delete "' + (family.name || 'this department') + '" and its ' + family.members.length + ' people?')) return;
+    delDept.title = 'Delete this department and everyone in it';
+    armConfirm(delDept, 'Delete ' + family.members.length + ' people?', function () {
+      var what = family.name || 'that department';
+      snapshot();
       model.families.splice(dIndex, 1);
       markDirty();
       render();
+      offerUndo('Deleted ' + what + '.');
     });
     head.appendChild(delDept);
     wrap.appendChild(head);

@@ -14,11 +14,33 @@ a lock screen and the payload is noise. Decryption happens entirely in the brows
 | --- | --- | --- |
 | `people.json` | **No** (gitignored) | Your real names and birthdates. Stays on your Mac. |
 | `people.sample.json` | Yes | Template showing the format. |
-| `build.mjs` | Yes | Encrypts `people.json` into `data.enc.js`. |
+| `edit.mjs` + `tools/` | Yes | The local editor UI (`node edit.mjs`). |
+| `build.mjs` | Yes | Command-line version of the same encrypt step. |
+| `lib/encrypt.mjs` | Yes | Validation + AES-GCM encryption, shared by both. |
 | `data.enc.js` | Yes | The encrypted payload the site loads. |
 | `index.html`, `app.js`, `styles.css` | Yes | The site. |
 
-## Editing the chart
+## The easy way: the editor
+
+```bash
+cd "/Users/brooksneal/Documents/Claude Code Projects/family-org-chart" && node edit.mjs
+```
+
+Then open **http://localhost:4173**. You get a form for every person &mdash; name, role,
+birthdate picker, and a "Reports to" dropdown that draws the connector lines. Add and
+remove people, reorder them, add whole families, and watch each person's age appear as
+you type the date.
+
+- **Save** writes `people.json` (Cmd-S works too). Nothing leaves your Mac.
+- **Preview chart** opens the real chart at http://localhost:4173/chart.
+- **Publish** asks for the passphrase once, then encrypts, commits, and pushes.
+  GitHub Pages picks it up within about a minute. Tick "Encrypt only" to rebuild
+  `data.enc.js` without pushing.
+
+The server binds to `127.0.0.1`, so it is only reachable from this Mac, and it refuses
+to serve `people.json` over HTTP. Press Ctrl+C in the terminal when you are done.
+
+## The manual way: editing the JSON
 
 1. Open `people.json` and edit it. One object per department:
 
@@ -56,12 +78,8 @@ passphrase will need the new one; anyone with the site open should hit **Lock**.
 
 ## Previewing locally
 
-```bash
-cd "/Users/brooksneal/Documents/Claude Code Projects/family-org-chart" && python3 -m http.server 3003
-```
-
-Then open http://localhost:3003. Do not open `index.html` by double-clicking it —
-browsers block the crypto API on `file://`.
+`node edit.mjs` already serves the chart at http://localhost:4173/chart. Do not open
+`index.html` by double-clicking it — browsers block the crypto API on `file://`.
 
 ## What "Remember on this device" does
 

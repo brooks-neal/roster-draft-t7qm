@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Org Chart Editor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9999;</text></svg>">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/tools/editor.css">
+</head>
+<body class="editor">
+
+<header class="ed-top">
+  <div class="ed-top-inner">
+    <div class="ed-title">
+      <strong>Org Chart Editor</strong>
+      <span class="ed-path">people.json &mdash; stays on this Mac</span>
+    </div>
+    <div class="ed-actions">
+      <span id="dirty" class="ed-dirty" hidden>Unsaved changes</span>
+      <span id="save-note" class="ed-note"></span>
+      <a class="ghost" href="/chart" target="_blank" rel="noopener">Preview chart</a>
+      <button class="ghost" id="save" type="button">Save</button>
+      <button class="btn" id="publish" type="button">Publish&hellip;</button>
+    </div>
+  </div>
+</header>
+
+<main class="ed-main" id="editor">
+  <div class="ed-meta">
+    <label>Chart title <input id="meta-title" type="text" placeholder="The Family &amp; Friends Org"></label>
+    <label>Subtitle <input id="meta-subtitle" type="text" placeholder="Est. forever ago"></label>
+  </div>
+  <div id="depts"></div>
+  <button class="ghost ed-add-dept" id="add-dept" type="button">+ Add a family / department</button>
+</main>
+
+<dialog id="publish-dialog">
+  <form method="dialog" class="ed-dialog">
+    <h2>Publish to GitHub</h2>
+    <p>This encrypts <code>people.json</code>, commits, and pushes. The passphrase is
+       used once and never stored.</p>
+    <label>Passphrase
+      <input id="pub-pass" type="password" autocomplete="current-password" placeholder="Family passphrase">
+    </label>
+    <label>Commit message
+      <input id="pub-msg" type="text" value="Update the org chart">
+    </label>
+    <label class="ed-check">
+      <input id="pub-encrypt-only" type="checkbox"> Encrypt only, don't push yet
+    </label>
+    <div id="pub-status" class="ed-status"></div>
+    <div class="ed-dialog-actions">
+      <button class="ghost" value="cancel" type="submit">Cancel</button>
+      <button class="btn" id="pub-go" value="go" type="button">Publish</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/editor.js"></script>
+</body>
+</html>

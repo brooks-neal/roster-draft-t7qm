@@ -182,12 +182,15 @@
     return card;
   }
 
-  function renderNode(member, deptName) {
+  function renderNode(member, deptName, seen) {
+    seen = seen || [];
+    if (seen.indexOf(member) > -1) return document.createElement('li');
+    seen = seen.concat([member]);
     var li = document.createElement('li');
     li.appendChild(personCard(member, deptName));
     if (member.__kids.length) {
       var ul = document.createElement('ul');
-      member.__kids.forEach(function (kid) { ul.appendChild(renderNode(kid, deptName)); });
+      member.__kids.forEach(function (kid) { ul.appendChild(renderNode(kid, deptName, seen)); });
       li.appendChild(ul);
     }
     return li;

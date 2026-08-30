@@ -73,8 +73,31 @@ silently becoming ciphertext.
 
 ## Changing the passphrase
 
-Re-run `node build.mjs` with the new one and push. Everyone using the old
-passphrase will need the new one; anyone with the site open should hit **Lock**.
+There is nothing to "change" — the passphrase is never stored anywhere. Every publish
+re-encrypts `people.json` from scratch with whatever passphrase you type, so **hit
+Publish and enter the new one**. That is the whole procedure.
+
+What happens to everyone else:
+
+- Anyone who ticked "Remember on this device" is silently returned to the lock screen
+  on their next visit, and their saved passphrase is deleted. They just need the new one.
+- Anyone with the page already open keeps seeing it until they reload.
+
+**What a passphrase change does not do:** old commits in the public repo still contain
+the old `data.enc.js`. Someone who had the previous passphrase, and who kept or can
+fetch an old commit, can still decrypt that older snapshot of the chart. Changing the
+passphrase protects everything from now on, not what was already published.
+
+If you need a genuine reset — say a passphrase leaked and you want the old data gone
+from GitHub entirely — the history has to go too:
+
+```bash
+cd "/Users/brooksneal/Documents/Claude Code Projects/family-org-chart" && node build.mjs && git checkout --orphan fresh && git add -A && git commit -m "Org chart" && git branch -D main && git branch -m main && git push -f origin main
+```
+
+That replaces the repo's entire history with a single commit holding only the newly
+encrypted data. It cannot be undone, and anyone who already cloned the repo keeps
+their copy.
 
 ## Previewing locally
 

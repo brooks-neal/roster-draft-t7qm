@@ -1,0 +1,3 @@
+# NEVER commit the plaintext people file — it holds real names and birthdates.
+people.json
+.DS_Store

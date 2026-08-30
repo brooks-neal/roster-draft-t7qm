@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Org Chart</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127968;</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="lock">
+  <form class="lock-card" id="lock-form" autocomplete="off">
+    <div class="lock-badge">&#128274;</div>
+    <h1>Private org chart</h1>
+    <p>Enter the family passphrase to load the directory.</p>
+    <div class="lock-row">
+      <input id="passphrase" type="password" placeholder="Passphrase" autocomplete="current-password" autofocus>
+      <button class="btn" id="unlock" type="submit">Unlock</button>
+    </div>
+    <label class="lock-remember">
+      <input type="checkbox" id="remember"> Remember on this device
+    </label>
+    <div id="lock-error" role="alert"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <div class="top-inner">
+      <div class="title-row">
+        <h1 class="org-title" id="org-title">Org Chart</h1>
+        <span class="org-sub" id="org-sub"></span>
+      </div>
+      <ul class="stats">
+        <li><span class="stat-label">Headcount</span><span class="stat-value" id="s-count">&mdash;</span></li>
+        <li><span class="stat-label">Departments</span><span class="stat-value" id="s-depts">&mdash;</span></li>
+        <li><span class="stat-label">Combined age</span><span class="stat-value" id="s-total">&mdash;</span></li>
+        <li><span class="stat-label">Average age</span><span class="stat-value" id="s-avg">&mdash;</span></li>
+        <li><span class="stat-label">Next birthday</span><span class="stat-value" id="s-next">&mdash;</span></li>
+      </ul>
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Search name, role, or department" autocomplete="off">
+        <button class="ghost" id="toggle-all" type="button">Collapse all</button>
+        <button class="ghost" id="toggle-precision" type="button" aria-pressed="true">Seconds: on</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="chart"></main>
+
+  <footer class="legal">
+    <span id="clock"></span>
+    <span>Decrypted in your browser &mdash; nothing is sent anywhere.</span>
+    <button type="button" id="lock-again">Lock</button>
+  </footer>
+</div>
+
+<script src="data.enc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "title": "The Family & Friends Org",
+  "subtitle": "Est. forever ago · No layoffs, ever",
+  "families": [
+    {
+      "name": "Neal Family",
+      "tagline": "Headquarters",
+      "members": [
+        { "id": "dad",  "name": "Robert Neal",  "role": "Chief Executive Dad",     "birthdate": "1962-03-14" },
+        { "id": "mom",  "name": "Linda Neal",   "role": "Chief Operating Mom",     "birthdate": "1964-07-02" },
+        { "id": "me",   "name": "Brooks Neal",  "role": "VP of Group Chats",       "birthdate": "1994-11-23", "parent": "dad" },
+        { "id": "sis",  "name": "Ava Neal",     "role": "Director of Chaos",       "birthdate": "1998-05-09", "parent": "dad" },
+        { "id": "kid",  "name": "Milo Neal",    "role": "Junior Analyst (Snacks)", "birthdate": "2021-01-30", "parent": "me" }
+      ]
+    },
+    {
+      "name": "Whitmore Family",
+      "tagline": "West Coast Branch",
+      "members": [
+        { "id": "w1", "name": "Dana Whitmore",  "role": "Regional Manager",   "birthdate": "1988-09-17" },
+        { "id": "w2", "name": "Chris Whitmore", "role": "Head of Grilling",   "birthdate": "1987-02-28", "parent": "w1" },
+        { "id": "w3", "name": "Iris Whitmore",  "role": "Intern",             "birthdate": "2016-06-21", "parent": "w1" }
+      ]
+    },
+    {
+      "name": "College Crew",
+      "tagline": "Acquired 2013",
+      "members": [
+        { "id": "c1", "name": "Sam Okafor",  "role": "Chief Vibes Officer",       "birthdate": "1995-04-05" },
+        { "id": "c2", "name": "Priya Raman", "role": "Head of Trip Planning",     "birthdate": "1995-12-11" },
+        { "id": "c3", "name": "Jesse Lin",   "role": "Fantasy League Commissioner","birthdate": "1994-08-19" }
+      ]
+    }
+  ]
+}

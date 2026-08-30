@@ -230,6 +230,21 @@
     return dept;
   }
 
+  // The local preview and the published site otherwise look identical, which makes it
+  // easy to think you are looking at published data when you are not.
+  function markLocalPreview() {
+    var host = window.location.hostname;
+    if (host !== 'localhost' && host !== '127.0.0.1' && host !== '') return;
+    if (document.getElementById('local-banner')) return;
+    var bar = document.createElement('div');
+    bar.id = 'local-banner';
+    bar.innerHTML =
+      '<strong>Local preview</strong> &mdash; unpublished changes on this Mac. ' +
+      'The live site is <a href="https://brooks-neal.github.io/roster-draft-t7qm/">brooks-neal.github.io/roster-draft-t7qm</a>.';
+    document.body.insertBefore(bar, document.body.firstChild);
+    document.body.classList.add('has-local-banner');
+  }
+
   function render() {
     document.getElementById('org-title').textContent = data.title || 'Org Chart';
     document.title = data.title || 'Org Chart';
@@ -360,6 +375,7 @@
   }
 
   function boot() {
+    markLocalPreview();
     if (!window.__ORG_DATA__) {
       document.getElementById('lock-error').textContent =
         'data.enc.js is missing. Run: node build.mjs';

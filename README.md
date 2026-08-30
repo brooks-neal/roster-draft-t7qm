@@ -55,8 +55,11 @@ to serve `people.json` over HTTP. Press Ctrl+C in the terminal when you are done
 }
 ```
 
-- `birthdate` is `YYYY-MM-DD`, or `YYYY-MM-DD HH:MM` if you know the hour of birth.
-  It is read as local time, so the counter is right down to the second.
+- `birthdate` is **optional** — leave it out and the person still appears on the chart,
+  with "Birthdate to come" where the age counter goes. Fill it in whenever you find it.
+  Format is `YYYY-MM-DD`, or `YYYY-MM-DD HH:MM` if you know the hour of birth. It is
+  read as local time, so the counter is right down to the second. The headcount tells
+  you how many people are still missing a date.
 - `parent` is optional and points at another member's `id` in the same department.
   It draws the connector line. Leave it off and the person sits at the top row.
 - `role` and `tagline` are optional flavor.

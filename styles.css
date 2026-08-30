@@ -296,6 +296,13 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px; display: grid; gap: 22p
   white-space: nowrap;
 }
 .p-age .u { color: var(--text-faint); }
+.p-age.undated {
+  color: var(--text-faint);
+  font-style: italic;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  border-style: dashed;
+}
 .bday-flag {
   position: absolute;
   top: -8px;

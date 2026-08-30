@@ -155,12 +155,12 @@
 
     var born = document.createElement('div');
     born.className = 'p-born';
-    born.textContent = birth ? 'Born ' + formatBorn(birth) : 'Birthdate missing';
+    born.textContent = birth ? 'Born ' + formatBorn(birth) : 'Birthdate to come';
     card.appendChild(born);
 
     var age = document.createElement('div');
-    age.className = 'p-age';
-    age.textContent = birth ? '...' : 'n/a';
+    age.className = birth ? 'p-age' : 'p-age undated';
+    age.textContent = birth ? '...' : 'age unknown';
     card.appendChild(age);
 
     var flag = document.createElement('div');
@@ -168,17 +168,16 @@
     flag.hidden = true;
     card.appendChild(flag);
 
-    if (birth) {
-      people.push({
-        name: member.name || '',
-        role: member.role || '',
-        dept: deptName,
-        birth: birth,
-        card: card,
-        ageEl: age,
-        flagEl: flag
-      });
-    }
+    // Everyone joins the list, dated or not, so search and headcount cover them.
+    people.push({
+      name: member.name || '',
+      role: member.role || '',
+      dept: deptName,
+      birth: birth,
+      card: card,
+      ageEl: age,
+      flagEl: flag
+    });
     return card;
   }
 
@@ -255,7 +254,9 @@
     people = [];
     (data.families || []).forEach(function (family) { chart.appendChild(renderDept(family)); });
 
-    document.getElementById('s-count').textContent = people.length;
+    var undated = people.filter(function (p) { return !p.birth; }).length;
+    document.getElementById('s-count').innerHTML =
+      people.length + (undated ? ' <small>(' + undated + ' need a date)</small>' : '');
     document.getElementById('s-depts').textContent = (data.families || []).length;
   }
 
@@ -266,8 +267,11 @@
     var totalYears = 0;
     var soonest = null;
 
+    var dated = 0;
     for (var i = 0; i < people.length; i++) {
       var p = people[i];
+      if (!p.birth) continue;
+      dated++;
       var parts = ageParts(p.birth, now);
       p.ageEl.innerHTML = formatAge(parts);
       totalYears += (now - p.birth) / 31557600000; // 365.25d, for the aggregate stats only
@@ -290,16 +294,20 @@
       if (!soonest || next < soonest.when) soonest = { when: next, person: p, days: daysAway, today: isToday };
     }
 
-    if (people.length) {
+    var missing = people.length - dated;
+    var qualifier = missing ? ' <small>(' + dated + ' with dates)</small>' : '';
+    if (dated) {
       document.getElementById('s-total').innerHTML =
-        Math.floor(totalYears) + ' <small>years</small>';
+        Math.floor(totalYears) + ' <small>years</small>' + qualifier;
       document.getElementById('s-avg').innerHTML =
-        (totalYears / people.length).toFixed(1) + ' <small>years</small>';
-      if (soonest) {
-        document.getElementById('s-next').innerHTML =
-          soonest.person.name +
-          ' <small>' + (soonest.today ? 'today' : 'in ' + soonest.days + 'd') + '</small>';
-      }
+        (totalYears / dated).toFixed(1) + ' <small>years</small>';
+      document.getElementById('s-next').innerHTML = soonest
+        ? soonest.person.name + ' <small>' + (soonest.today ? 'today' : 'in ' + soonest.days + 'd') + '</small>'
+        : '&mdash;';
+    } else {
+      document.getElementById('s-total').innerHTML = '&mdash;';
+      document.getElementById('s-avg').innerHTML = '&mdash;';
+      document.getElementById('s-next').innerHTML = '<small>no birthdates yet</small>';
     }
 
     document.getElementById('clock').textContent =

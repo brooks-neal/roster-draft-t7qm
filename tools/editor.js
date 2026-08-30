@@ -178,8 +178,10 @@
     tr.appendChild(tdAge);
     function paintAge() {
       var y = yearsOld(member.birthdate);
-      tdAge.textContent = y == null ? 'set a date' : y + ' yrs';
-      tdAge.classList.toggle('bad', y == null);
+      tdAge.textContent = y == null ? 'no date yet' : y + ' yrs';
+      tdAge.classList.toggle('muted', y == null);
+      // Only an unparseable date is an error; an empty one is fine.
+      tdAge.classList.toggle('bad', y == null && !!member.birthdate);
     }
     paintAge();
 
@@ -401,7 +403,8 @@
       subtitle: model.subtitle,
       families: model.families.map(function (f) {
         var out = { name: f.name, members: f.members.map(function (m) {
-          var person = { id: m.id, name: m.name, birthdate: m.birthdate };
+          var person = { id: m.id, name: m.name };
+          if (m.birthdate) person.birthdate = m.birthdate;
           if (m.role) person.role = m.role;
           if (m.parent) person.parent = m.parent;
           return person;
@@ -422,9 +425,14 @@
       .then(function (res) {
         if (res.error) throw new Error(res.error);
         markClean();
+        var undated = 0;
+        model.families.forEach(function (f) {
+          f.members.forEach(function (m) { if (!m.birthdate) undated++; });
+        });
         note(res.problems && res.problems.length
           ? 'Saved, but: ' + res.problems[0]
-          : 'Saved ' + res.people + ' people to people.json');
+          : 'Saved ' + res.people + ' people'
+            + (undated ? ' (' + undated + ' still need a birthdate)' : ''));
         return true;
       })
       .catch(function (err) {

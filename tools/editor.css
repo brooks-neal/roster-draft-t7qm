@@ -93,6 +93,7 @@ table.ed-table td { padding: 5px 8px; border-bottom: 1px solid var(--line-soft);
 table.ed-table tr:last-child td { border-bottom: 0; }
 td.ed-age { font-family: var(--mono); font-size: 12px; color: var(--text-dim); white-space: nowrap; }
 td.ed-age.bad { color: #e5534b; }
+td.ed-age.muted { color: var(--text-faint); font-style: italic; font-family: var(--sans); }
 .ed-row-tools { display: flex; gap: 4px; }
 .icon-btn {
   background: none;

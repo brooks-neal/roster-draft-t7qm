@@ -22,6 +22,13 @@ a lock screen and the payload is noise. Decryption happens entirely in the brows
 
 ## The easy way: the editor
 
+**Double-click `Open Org Chart Editor.command`** in this folder in Finder. It starts the
+editor and opens it in your browser; closing that Terminal window stops it. If the
+editor is already running, it just opens the page.
+
+The editor does not survive a restart or a closed Terminal window, so this is how you
+start it each time. The equivalent command:
+
 ```bash
 cd "/Users/brooksneal/Documents/Claude Code Projects/family-org-chart" && node edit.mjs
 ```

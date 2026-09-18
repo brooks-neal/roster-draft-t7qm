@@ -382,11 +382,28 @@
       });
   }
 
+  // GitHub Pages lets browsers cache files for 10 minutes, which made a fresh publish
+  // (or a passphrase change) look like it had not happened. The timestamp forces a
+  // fresh copy of the data on every visit; the rest of the site can stay cached.
+  function loadData() {
+    return new Promise(function (resolve) {
+      var s = document.createElement('script');
+      s.src = 'data.enc.js?t=' + Date.now();
+      s.onload = resolve;
+      s.onerror = resolve;
+      document.head.appendChild(s);
+    });
+  }
+
   function boot() {
     markLocalPreview();
+    loadData().then(init);
+  }
+
+  function init() {
     if (!window.__ORG_DATA__) {
       document.getElementById('lock-error').textContent =
-        'data.enc.js is missing. Run: node build.mjs';
+        'Could not load the chart data. Check your connection and reload.';
       return;
     }
     if (!window.crypto || !window.crypto.subtle) {
